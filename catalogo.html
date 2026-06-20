@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Catálogo de perfumes Fly Soul — Fragancias árabes, inspiradas y dupes de autor para hombre, mujer y unisex.">
+  <title>Catálogo — Fly Soul Perfumes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════
+       NAVEGACIÓN
+  ════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-text">Fly Soul.</span>
+      <span class="nav-logo-sub">PERFUMES</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="catalogo.html" class="nav-active">Catálogo</a></li>
+      <li><a href="nosotros.html">Nosotros</a></li>
+      <li><a href="#contacto" class="nav-cta">Contactar</a></li>
+    </ul>
+    <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ════════════════════════════════════════════
+       CATÁLOGO
+  ════════════════════════════════════════════ -->
+  <section class="catalogo catalogo--page" id="catalogo">
+    <div class="container">
+      <p class="section-label fade-in-up">Colección</p>
+      <h2 class="section-title fade-in-up">Nuestros Perfumes</h2>
+      <p class="section-sub fade-in-up">Cada frasco, una historia. Cada aroma, una versión tuya.</p>
+
+      <!-- Estado: cargando / error -->
+      <div class="catalogo-estado" id="catalogoEstado">
+        <div class="loading-spinner" id="loadingSpinner">
+          <div class="spinner-ring"></div>
+          <p>Cargando catálogo...</p>
+        </div>
+        <div class="error-state hidden" id="errorState">
+          <span class="error-icon" aria-hidden="true">✦</span>
+          <p class="error-msg">No pudimos cargar el catálogo en este momento.</p>
+          <p class="error-hint">Revisá tu conexión o intentá de nuevo.</p>
+          <button class="btn-secondary" id="btnReintentar">Reintentar</button>
+        </div>
+      </div>
+
+      <!-- Vista 1: Selector de categorías -->
+      <div id="vistaCategorias" class="categorias-selector hidden">
+        <div class="categorias-grid">
+
+          <button class="categoria-card" data-cat="hombre">
+            <div class="categoria-circulo categoria-circulo--hombre">
+              <svg viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="10" y="34" width="40" height="38" rx="4" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="20" y="20" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="14" y="13" width="32" height="9" rx="2" fill="currentColor" fill-opacity="0.55"/>
+                <line x1="10" y1="49" x2="50" y2="49" stroke="currentColor" stroke-width="1" stroke-opacity="0.45"/>
+                <line x1="10" y1="59" x2="50" y2="59" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+              </svg>
+            </div>
+            <h3 class="categoria-nombre">Hombre</h3>
+            <p class="categoria-count" id="countHombre">— productos</p>
+          </button>
+
+          <button class="categoria-card" data-cat="mujer">
+            <div class="categoria-circulo categoria-circulo--mujer">
+              <svg viewBox="0 0 60 85" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M22 32 C16 38 11 48 11 58 C11 70 19 79 30 79 C41 79 49 70 49 58 C49 48 44 38 38 32 Z" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="24" y="14" width="12" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <ellipse cx="30" cy="9" rx="8" ry="5" fill="currentColor" fill-opacity="0.55"/>
+                <line x1="11" y1="56" x2="49" y2="56" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+              </svg>
+            </div>
+            <h3 class="categoria-nombre">Mujer</h3>
+            <p class="categoria-count" id="countMujer">— productos</p>
+          </button>
+
+
+        </div>
+      </div>
+
+      <!-- Vista 2: Productos de la categoría seleccionada -->
+      <div id="vistaProductos" class="hidden">
+
+        <div class="productos-nav">
+          <button id="btnVolver" class="btn-volver">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Categorías
+          </button>
+          <p class="productos-breadcrumb">Catálogo / <span id="breadcrumbCat" class="breadcrumb-cat"></span></p>
+        </div>
+
+        <!-- Overlay y botón solo visibles en mobile -->
+        <div class="filtros-overlay" id="filtrosOverlay"></div>
+
+        <div class="productos-layout">
+
+          <!-- Sidebar de filtros -->
+          <aside class="filtros-sidebar" id="filtrosSidebar">
+            <button class="btn-cerrar-filtros" id="btnCerrarFiltros">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+              Cerrar
+            </button>
+
+            <div class="filtro-grupo">
+              <h4 class="filtro-titulo">Filtrar por precio</h4>
+              <p class="precio-display">
+                <span id="precioLabelMin">₲ 0</span> — <span id="precioLabelMax">₲ 0</span>
+              </p>
+              <div class="precio-slider-row">
+                <span class="precio-slider-label">Desde</span>
+                <input type="range" id="rangeMin" class="precio-range" min="0" max="1000000" value="0" step="5000" aria-label="Precio mínimo">
+              </div>
+              <div class="precio-slider-row">
+                <span class="precio-slider-label">Hasta</span>
+                <input type="range" id="rangeMax" class="precio-range" min="0" max="1000000" value="1000000" step="5000" aria-label="Precio máximo">
+              </div>
+              <button class="btn-aplicar-filtro" id="btnFiltrarPrecio">Filtrar</button>
+            </div>
+
+          </aside>
+
+          <!-- Contenido principal: buscador + grilla -->
+          <div class="productos-main">
+
+            <!-- Botón para abrir filtros en mobile -->
+            <button class="btn-filtros-mobile" id="btnFiltrosMobile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="4" y1="6" x2="20" y2="6"/>
+                <line x1="7" y1="12" x2="17" y2="12"/>
+                <line x1="10" y1="18" x2="14" y2="18"/>
+              </svg>
+              Filtros
+            </button>
+
+            <div class="buscador-wrapper">
+              <label for="buscadorNombre" class="sr-only">Buscar perfume por nombre</label>
+              <div class="buscador-inner">
+                <svg class="buscador-icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <input
+                  type="search"
+                  id="buscadorNombre"
+                  class="buscador-input"
+                  placeholder="Buscar por nombre…"
+                  autocomplete="off">
+                <button class="buscador-clear hidden" id="buscadorClear" aria-label="Limpiar búsqueda">✕</button>
+              </div>
+            </div>
+
+            <!-- Grilla de productos (se llena con JS) -->
+            <div class="productos-grid" id="productosGrid" role="list"></div>
+
+            <!-- Sin resultados -->
+            <div class="sin-resultados hidden" id="sinResultados">
+              <p>No hay perfumes en esta categoría por el momento.</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       FOOTER / CONTACTO
+  ════════════════════════════════════════════ -->
+  <footer class="footer" id="contacto">
+    <div class="container footer-inner">
+
+      <div class="footer-brand">
+        <p class="footer-logo-text">Fly Soul.</p>
+        <p class="footer-logo-sub">PERFUMES</p>
+        <p class="footer-slogan"><em>Lleva tu esencia.</em></p>
+      </div>
+
+      <nav class="footer-nav" aria-label="Navegación del footer">
+        <h4 class="footer-heading">Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="catalogo.html">Catálogo</a></li>
+          <li><a href="index.html#como-comprar">Cómo comprar</a></li>
+          <li><a href="nosotros.html">Nosotros</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer-contacto">
+        <h4 class="footer-heading">Contacto</h4>
+        <p>Atendemos por WhatsApp de lunes a sábado. Respondemos rápido.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn whatsapp-btn" id="footerWhatsapp" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            WhatsApp
+          </a>
+          <a href="#" class="social-btn instagram-btn" id="footerInstagram" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fly Soul Perfumes</p>
+    </div>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a href="#" class="whatsapp-float" id="whatsappFloat" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <script src="main.js"></script>
+</body>
+</html>
